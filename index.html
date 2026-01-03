@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Crypto Fee Comparator | Real-Time Network Costs</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔗</text></svg>">
+<link type="text/css" rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+    <!-- Loading overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Loading real-time crypto fees...</p>
+    </div>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-container">
+                    <div class="logo-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>CryptoFee<span>Comparator</span></h1>
+                        <p class="tagline">Professional Network Fee Analytics</p>
+                    </div>
+                </div>
+                
+                <div class="header-stats">
+                    <div class="stat-box">
+                        <div class="stat-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" id="avg-fee">$1.42</span>
+                            <span class="stat-label">Avg. Fee</span>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" id="network-count">6</span>
+                            <span class="stat-label">Networks</span>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-value" id="update-time">0s</span>
+                            <span class="stat-label">Updated</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <ul class="nav-links">
+                <li class="active"><a href="#"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="#"><i class="fas fa-exchange-alt"></i> Compare</a></li>
+                <li><a href="#"><i class="fas fa-chart-bar"></i> Analytics</a></li>
+                <li><a href="#"><i class="fasfa-history"></i> History</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Controls Panel -->
+            <section class="controls-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-sliders-h"></i> Fee Comparison Controls</h2>
+                    <div class="last-update" id="last-update">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>Updating...</span>
+                    </div>
+                </div>
+                
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <label for="base-currency"><i class="fas fa-dollar-sign"></i> Base Currency</label>
+                        <div class="select-wrapper">
+                            <select id="base-currency" class="styled-select">
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                                <option value="BTC">BTC (₿)</option>
+                                <option value="ETH">ETH (Ξ)</option>
+                            </select>
+                            <div class="select-arrow">
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="fee-type"><i class="fas fa-layer-group"></i> Fee Display</label>
+                        <div class="select-wrapper">
+                            <select id="fee-type" class="styled-select">
+                                <option value="absolute">Absolute Values</option>
+                                <option value="relative">Relative to Avg</option>
+                                <option value="gas">Gas Units (ETH)</option>
+                                <option value="sats">Satoshis (BTC)</option>
+                            </select>
+                            <div class="select-arrow">
+                                <i class="fas fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group toggle-group">
+                        <label><i class="fas fa-sync-alt"></i> Auto-Refresh</label>
+                        <div class="toggle-container">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="auto-refresh" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <span class="toggle-label" id="refresh-status">ON (30s)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <button class="btn-refresh" id="manual-refresh">
+                            <i class="fas fa-redo"></i> Refresh Now
+                        </button>
+                        <button class="btn-export" id="export-data">
+                            <i class="fas fa-download"></i> Export Data
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Crypto Fee Dashboard -->
+            <section class="dashboard-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-coins"></i> Network Fee Dashboard</h2>
+                    <div class="view-options">
+                        <button class="view-btn active" data-view="grid"><i class="fas fa-th-large"></i></button>
+                        <button class="view-btn" data-view="list"><i class="fas fa-list"></i></button>
+                        <button class="view-btn" data-view="compact"><i class="fas fa-compress-alt"></i></button>
+                    </div>
+                </div>
+                
+                <div class="dashboard-grid" id="crypto-dashboard">
+                    <!-- Crypto cards will be dynamically inserted here -->
+                </div>
+                
+                <div class="dashboard-footer">
+                    <div class="legend">
+                        <div class="legend-item">
+                            <span class="legend-color low"></span>
+                            <span>Low Fee</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color medium"></span>
+                            <span>Medium Fee</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color high"></span>
+                            <span>High Fee</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color urgent"></span>
+                            <span>Urgent Fee</span>
+                        </div>
+                    </div>
+                    <div class="last-updated-full">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Data updates every 30 seconds. Fees are estimates for standard transactions.</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analytics & Insights -->
+            <section class="analytics-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-pie"></i> Fee Analytics & Insights</h2>
+                </div>
+                
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="analytics-header">
+                            <h3><i class="fas fa-fire"></i> Network Congestion</h3>
+                            <div class="congestion-level" id="congestion-level">Medium</div>
+                        </div>
+                        <div class="congestion-meter">
+                            <div class="meter-bar">
+                                <div class="meter-fill" id="congestion-meter"></div>
+                            </div>
+                            <div class="meter-labels">
+                                <span>Low</span>
+                                <span>Medium</span>
+                                <span>High</span>
+                                <span>Extreme</span>
+                            </div>
+                        </div>
+                        <div class="insight-text">
+                            <p><i class="fas fa-lightbulb"></i> <strong>Insight:</strong> Best time for low-fee transactions is between 2AM-6AM UTC.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <div class="analytics-header">
+                            <h3><i class="fas fa-percentage"></i> Cost Efficiency</h3>
+                            <div class="efficiency-score" id="efficiency-score">78%</div>
+                        </div>
+                        <div class="efficiency-chart">
+                            <canvas id="efficiencyChart" width="300" height="150"></canvas>
+                        </div>
+                        <div class="insight-text">
+                            <p><i class="fas fa-lightbulb"></i> <strong>Insight:</strong> Layer 2 solutions can reduce fees by up to 90%.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <div class="analytics-header">
+                            <h3><i class="fas fa-bolt"></i> Fastest Network</h3>
+                            <div class="network-name" id="fastest-network">Solana</div>
+                        </div>
+                        <div class="network-stats">
+                            <div class="network-stat">
+                                <span class="stat-label">Avg. Speed</span>
+                                <span class="stat-value" id="avg-speed">0.4s</span>
+                            </div>
+                            <div class="network-stat">
+                                <span class="stat-label">Cost</span>
+                                <span class="stat-value" id="fastest-cost">$0.0001</span>
+                            </div>
+                        </div>
+                        <div class="insight-text">
+                            <p><i class="fas fa-lightbulb"></i> <strong>Insight:</strong> Consider transaction urgency when selecting network.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="footer-text">
+                        <h3>CryptoFeeComparator</h3>
+                        <p>Professional-grade crypto network analytics</p>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>Product</h4>
+                        <a href="#">Features</a>
+                        <a href="#">API Access</a>
+                        <a href="#">Enterprise</a>
+                    </div>
+                    <div class="link-group">
+                        <h4>Resources</h4>
+                        <a href="#">Documentation</a>
+                        <a href="#">Blog</a>
+                        <a href="#">Support</a>
+                    </div>
+                    <div class="link-group">
+                        <h4>Legal</h4>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Disclaimer</a>
+                    </div>
+                </div>
+                
+                <div class="footer-newsletter">
+                    <h4>Stay Updated</h4>
+                    <p>Get the latest crypto fee insights</p>
+                    <div class="newsletter-form">
+                        <input type="email" placeholder="Your email address">
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 CryptoFeeComparator. All rights reserved. Data is for informational purposes only. Actual fees may vary.</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                    <a href="#"><i class="fab fa-telegram"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <i class="fas fa-check-circle"></i>
+            <span class="toast-message">Data updated successfully!</span>
+        </div>
+        <button class="toast-close">&times;</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+<script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>
