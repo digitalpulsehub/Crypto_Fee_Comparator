@@ -880,38 +880,7 @@ input:checked + .toggle-slider:before {
     transform: translateX(5px);
 }
 
-.footer-newsletter h4 {
-    margin-bottom: 15px;
-}
-
-.newsletter-form {
-    display: flex;
-    margin-top: 15px;
-}
-
-.newsletter-form input {
-    flex: 1;
-    padding: 14px 15px;
-    background-color: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(108, 99, 255, 0.3);
-    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
-    color: var(--white);
-    font-family: 'Poppins', sans-serif;
-}
-
-.newsletter-form button {
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    padding: 0 20px;
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.newsletter-form button:hover {
-    background-color: var(--primary-dark);
-}
+/* Newsletter section removed */
 
 .footer-bottom {
     display: flex;
